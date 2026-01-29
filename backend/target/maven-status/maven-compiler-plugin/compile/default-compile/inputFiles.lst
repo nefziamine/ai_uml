@@ -1,0 +1,12 @@
+/app/src/main/java/com/aiuml/backend/controller/ProjectController.java
+/app/src/main/java/com/aiuml/backend/model/User.java
+/app/src/main/java/com/aiuml/backend/repository/PatternSuggestionRepository.java
+/app/src/main/java/com/aiuml/backend/service/AiAnalysisService.java
+/app/src/main/java/com/aiuml/backend/model/Project.java
+/app/src/main/java/com/aiuml/backend/BackendApplication.java
+/app/src/main/java/com/aiuml/backend/repository/DiagramRepository.java
+/app/src/main/java/com/aiuml/backend/repository/ProjectRepository.java
+/app/src/main/java/com/aiuml/backend/service/ProjectService.java
+/app/src/main/java/com/aiuml/backend/model/Diagram.java
+/app/src/main/java/com/aiuml/backend/model/PatternSuggestion.java
+/app/src/main/java/com/aiuml/backend/repository/UserRepository.java

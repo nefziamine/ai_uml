@@ -1,0 +1,17 @@
+com/aiuml/backend/model/Project.class
+com/aiuml/backend/repository/DiagramRepository.class
+com/aiuml/backend/repository/ProjectRepository.class
+com/aiuml/backend/model/User$UserBuilder.class
+com/aiuml/backend/model/PatternSuggestion$PatternSuggestionBuilder.class
+com/aiuml/backend/model/User.class
+com/aiuml/backend/model/User$Role.class
+com/aiuml/backend/service/ProjectService.class
+com/aiuml/backend/model/Project$ProjectBuilder.class
+com/aiuml/backend/model/PatternSuggestion.class
+com/aiuml/backend/service/AiAnalysisService.class
+com/aiuml/backend/model/Diagram.class
+com/aiuml/backend/controller/ProjectController.class
+com/aiuml/backend/model/Diagram$DiagramBuilder.class
+com/aiuml/backend/BackendApplication.class
+com/aiuml/backend/repository/PatternSuggestionRepository.class
+com/aiuml/backend/repository/UserRepository.class
