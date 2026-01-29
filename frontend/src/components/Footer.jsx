@@ -24,15 +24,15 @@ const Footer = () => {
                             Empowering architects with AI-driven design pattern detection and UML generation. Build faster, design better.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary hover:text-accent-primary hover:border-accent-primary transition-all">
+                            <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary hover:text-accent-primary hover:border-accent-primary transition-all">
                                 <Github size={18} />
-                            </a>
-                            <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary hover:text-accent-primary hover:border-accent-primary transition-all">
+                            </button>
+                            <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary hover:text-accent-primary hover:border-accent-primary transition-all">
                                 <Twitter size={18} />
-                            </a>
-                            <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary hover:text-accent-primary hover:border-accent-primary transition-all">
+                            </button>
+                            <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary hover:text-accent-primary hover:border-accent-primary transition-all">
                                 <Linkedin size={18} />
-                            </a>
+                            </button>
                         </div>
                     </div>
 
