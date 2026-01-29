@@ -51,25 +51,22 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(request -> {
             org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
-            config.setAllowedOrigins(java.util.List.of("http://localhost:3000"));
+            config.setAllowedOriginPatterns(java.util.List.of("*"));
             config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             config.setAllowedHeaders(java.util.List.of("*"));
             config.setAllowCredentials(true);
             return config;
         }))
-        .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> 
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                            .requestMatchers("/api/test/**").permitAll()
-                            .requestMatchers("/oauth2/**").permitAll()
-                            .requestMatchers("/api/projects/**").authenticated()
-                            .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/test/**").permitAll()
+                        .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers("/api/projects/**").authenticated()
+                        .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .successHandler(oauth2AuthenticationSuccessHandler)
-                );
+                        .successHandler(oauth2AuthenticationSuccessHandler));
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
