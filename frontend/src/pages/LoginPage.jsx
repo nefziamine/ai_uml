@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { LogIn, Mail, Lock, User, Github, Chrome, ArrowRight, Loader2 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/api';
 
 const LoginPage = () => {
@@ -11,7 +12,10 @@ const LoginPage = () => {
     const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate();
+    const location = useLocation();
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,8 +24,12 @@ const LoginPage = () => {
 
         try {
             if (isLogin) {
-                await authService.login(email, password);
-                navigate('/dashboard');
+                await login(email, password);
+
+                // Get redirection path or default to dashboard
+                const params = new URLSearchParams(location.search);
+                const redirectTo = params.get('redirectTo') || '/dashboard';
+                navigate(redirectTo);
             } else {
                 await authService.register(email, name, password);
                 setIsLogin(true);

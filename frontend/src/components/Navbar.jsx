@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Sparkles } from 'lucide-react';
-import { authService } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const user = authService.getCurrentUser();
+  const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-2' : 'py-4'}`}>
@@ -53,14 +59,14 @@ const Navbar = () => {
 
           {/* Auth Buttons - Consistent padding */}
           <div className="flex items-center gap-3">
-            {user ? (
+            {isAuthenticated ? (
               <div className="flex items-center gap-4">
                 <Link to="/dashboard" className="btn btn-secondary py-2.5 px-4">
                   <LayoutDashboard size={16} />
                   <span className="hidden sm:inline">Dashboard</span>
                 </Link>
                 <button
-                  onClick={() => { authService.logout(); window.location.href = '/'; }}
+                  onClick={handleLogout}
                   className="text-sm font-bold text-muted hover:text-error transition-colors px-2"
                 >
                   Logout

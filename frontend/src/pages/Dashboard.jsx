@@ -3,22 +3,23 @@ import { motion } from 'framer-motion';
 import { Plus, Folder, Clock, ChevronRight, Search, LayoutGrid, List, Edit3, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { projectService, authService } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
     const navigate = useNavigate();
+    const { user, logout, isAuthenticated } = useAuth();
     const [projects, setProjects] = useState([]);
     const [viewMode, setViewMode] = useState('grid');
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        const user = authService.getCurrentUser();
-        if (!user) {
+        if (!isAuthenticated) {
             navigate('/login');
             return;
         }
         fetchProjects();
-    }, [navigate]);
+    }, [isAuthenticated, navigate]);
 
     const fetchProjects = async () => {
         setIsLoading(true);
@@ -37,9 +38,42 @@ const Dashboard = () => {
         if (!name) return;
         try {
             const newProject = await projectService.createProject(name, "New Project Description");
+            fetchProjects();
             navigate(`/project/${newProject.id}`);
         } catch (error) {
             alert("Failed to create project");
+        }
+    };
+
+    const handleDeleteProject = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this project?")) return;
+        try {
+            await projectService.deleteProject(id);
+            fetchProjects();
+        } catch (error) {
+            alert("Failed to delete project");
+        }
+    };
+
+    const handleEditProject = async (project) => {
+        const newName = prompt("Enter new project name:", project.name);
+        if (!newName) return;
+        try {
+            await projectService.updateProject(project.id, { ...project, name: newName });
+            fetchProjects();
+        } catch (error) {
+            alert("Failed to update project");
+        }
+    };
+
+    const handleDeleteAll = async () => {
+        if (!window.confirm("CRITICAL: This will delete ALL your projects permanently. Are you sure?")) return;
+        try {
+            await projectService.deleteAllProjects();
+            fetchProjects();
+        } catch (error) {
+            console.error("Failed to delete all projects:", error);
+            alert("Failed to delete all projects.");
         }
     };
 
@@ -58,10 +92,20 @@ const Dashboard = () => {
                         </h1>
                         <p className="text-secondary text-lg">Manage and analyze your software architectures</p>
                     </div>
-                    <button onClick={handleCreateProject} className="btn btn-primary shadow-xl py-3 px-6">
-                        <Plus size={18} />
-                        <span>New Project</span>
-                    </button>
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                        <button
+                            onClick={handleDeleteAll}
+                            className="btn btn-secondary text-error hover:bg-error/10 border-error/20 py-3 px-6 shadow-lg flex-1 md:flex-none"
+                            disabled={projects.length === 0}
+                        >
+                            <Trash2 size={18} />
+                            <span>Delete All</span>
+                        </button>
+                        <button onClick={handleCreateProject} className="btn btn-primary shadow-xl py-3 px-6 flex-1 md:flex-none">
+                            <Plus size={18} />
+                            <span>New Project</span>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Toolbar - Proper spacing between search and view toggle */}
@@ -109,6 +153,8 @@ const Dashboard = () => {
                                 viewMode={viewMode}
                                 index={index}
                                 onClick={() => navigate(`/project/${project.id}`)}
+                                onEdit={() => handleEditProject(project)}
+                                onDelete={() => handleDeleteProject(project.id)}
                             />
                         ))}
                     </div>
@@ -134,7 +180,7 @@ const Dashboard = () => {
     );
 };
 
-const ProjectCard = ({ project, viewMode, onClick, index }) => {
+const ProjectCard = ({ project, viewMode, onClick, index, onEdit, onDelete }) => {
     if (viewMode === 'list') {
         return (
             <motion.div
@@ -156,7 +202,23 @@ const ProjectCard = ({ project, viewMode, onClick, index }) => {
                         </p>
                     </div>
                 </div>
-                <ChevronRight size={20} className="text-secondary group-hover:text-primary transition-all" />
+                <div className="flex items-center gap-4">
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                            className="p-2 text-secondary hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                            onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                        >
+                            <Edit3 size={16} />
+                        </button>
+                        <button
+                            className="p-2 text-secondary hover:text-error transition-colors rounded-lg hover:bg-error/10"
+                            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                        >
+                            <Trash2 size={16} />
+                        </button>
+                    </div>
+                    <ChevronRight size={20} className="text-secondary group-hover:text-primary transition-all" />
+                </div>
             </motion.div>
         );
     }
@@ -176,14 +238,14 @@ const ProjectCard = ({ project, viewMode, onClick, index }) => {
                 <div className="flex gap-2">
                     <button
                         className="p-2.5 text-secondary hover:text-white transition-colors rounded-lg hover:bg-white/5"
-                        onClick={(e) => { e.stopPropagation(); }}
+                        onClick={(e) => { e.stopPropagation(); onEdit(); }}
                         aria-label="Edit project"
                     >
                         <Edit3 size={16} />
                     </button>
                     <button
                         className="p-2.5 text-secondary hover:text-error transition-colors rounded-lg hover:bg-error/10"
-                        onClick={(e) => { e.stopPropagation(); }}
+                        onClick={(e) => { e.stopPropagation(); onDelete(); }}
                         aria-label="Delete project"
                     >
                         <Trash2 size={16} />

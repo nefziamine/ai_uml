@@ -11,12 +11,18 @@ import DocsPage from './pages/DocsPage';
 import ForgotPassword from './pages/ForgotPassword';
 import ExportPage from './pages/ExportPage';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
-import { authService } from './services/api';
+import { InstantGeneration, PatternDetection, CodeSynchronized } from './pages/FeatureDetails';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Route protection component
 const ProtectedRoute = ({ children }) => {
-  const user = authService.getCurrentUser();
-  if (!user) {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen"><div className="loader"></div></div>;
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   return children;
@@ -24,59 +30,67 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <div className="app-wrapper">
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/templates" element={<TemplatesPage />} />
-            <Route path="/docs" element={<DocsPage />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+    <AuthProvider>
+      <Router>
+        <div className="app-wrapper">
+          <div className="bg-blob bg-blob-1"></div>
+          <div className="bg-blob bg-blob-2"></div>
+          <div className="bg-blob bg-blob-3"></div>
+          <Navbar />
+          <main>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/templates" element={<TemplatesPage />} />
+              <Route path="/docs" element={<DocsPage />} />
+              <Route path="/features/instant" element={<InstantGeneration />} />
+              <Route path="/features/patterns" element={<PatternDetection />} />
+              <Route path="/features/sync" element={<CodeSynchronized />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/project/:id"
-              element={
-                <ProtectedRoute>
-                  <ProjectViewer />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/export/:id"
-              element={
-                <ProtectedRoute>
-                  <ExportPage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+              {/* Protected Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/project/:id"
+                element={
+                  <ProtectedRoute>
+                    <ProjectViewer />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/export/:id"
+                element={
+                  <ProtectedRoute>
+                    <ExportPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
 
-      <style jsx="true">{`
-        .app-wrapper {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
-        main {
-          flex: 1;
-        }
-      `}</style>
-    </Router>
+        <style jsx="true">{`
+          .app-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+          }
+          main {
+            flex: 1;
+          }
+        `}</style>
+      </Router>
+    </AuthProvider>
   );
 }
 

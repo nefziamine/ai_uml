@@ -21,6 +21,9 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
+    private String requirements;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

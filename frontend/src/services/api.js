@@ -66,8 +66,24 @@ export const projectService = {
         return response.data;
     },
 
-    analyzeProject: async (projectId, requirements) => {
-        const response = await api.post(`/projects/${projectId}/analyze`, { requirements });
+    analyzeProject: async (projectId, requirements, type = 'CLASS') => {
+        const response = await api.post(`/projects/${projectId}/analyze`, { requirements, type });
+        return response.data;
+    },
+
+    updateProject: async (id, projectData) => {
+        const response = await api.put(`/projects/${id}`, projectData);
+        return response.data;
+    },
+
+    deleteProject: async (id) => {
+        const response = await api.delete(`/projects/${id}`);
+        return response.data;
+    },
+
+    deleteAllProjects: async () => {
+        const user = authService.getCurrentUser();
+        const response = await api.delete(`/projects/user/${user.id}`);
         return response.data;
     },
 

@@ -51,10 +51,10 @@ const Footer = () => {
                     <div>
                         <h4 className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Resources</h4>
                         <ul className="flex flex-col gap-4 text-sm text-secondary">
-                            <li><a href="#" className="hover:text-accent-primary transition-colors">API Reference</a></li>
-                            <li><a href="#" className="hover:text-accent-primary transition-colors">Community Forum</a></li>
-                            <li><a href="#" className="hover:text-accent-primary transition-colors">Design Patterns Guide</a></li>
-                            <li><a href="#" className="hover:text-accent-primary transition-colors">Changelog</a></li>
+                            <li><Link to="/docs" className="hover:text-accent-primary transition-colors">API Reference</Link></li>
+                            <li><a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent-primary transition-colors">Community Forum</a></li>
+                            <li><Link to="/templates" className="hover:text-accent-primary transition-colors">Design Patterns Guide</Link></li>
+                            <li><Link to="/docs" className="hover:text-accent-primary transition-colors">Changelog</Link></li>
                         </ul>
                     </div>
 
@@ -64,13 +64,14 @@ const Footer = () => {
                         <p className="text-sm text-secondary mb-6 leading-relaxed">
                             Subscribe to get latest design patterns and architect tips.
                         </p>
-                        <form className="relative group">
+                        <form className="relative group" onSubmit={(e) => { e.preventDefault(); alert("Thanks for subscribing!"); }}>
                             <input
                                 type="email"
                                 placeholder="architect@world.com"
                                 className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm text-white focus:border-accent-primary outline-none transition-all pr-12"
+                                required
                             />
-                            <button className="absolute right-2 top-1.5 p-1.5 rounded-lg bg-accent-primary text-white shadow-lg hover:bg-accent-secondary transition-colors">
+                            <button type="submit" className="absolute right-2 top-1.5 p-1.5 rounded-lg bg-accent-primary text-white shadow-lg hover:bg-accent-secondary transition-colors">
                                 <Mail size={16} />
                             </button>
                         </form>
@@ -82,9 +83,9 @@ const Footer = () => {
                         © 2026 AI UML Architect. Made with <Heart size={14} className="text-error fill-error" /> for developers.
                     </p>
                     <div className="flex gap-8">
-                        <a href="#" className="hover:text-secondary transition-colors">Privacy Policy</a>
-                        <a href="#" className="hover:text-secondary transition-colors">Terms of Service</a>
-                        <a href="#" className="hover:text-secondary transition-colors">Cookie Policy</a>
+                        <Link to="/docs" className="hover:text-secondary transition-colors">Privacy Policy</Link>
+                        <Link to="/docs" className="hover:text-secondary transition-colors">Terms of Service</Link>
+                        <Link to="/docs" className="hover:text-secondary transition-colors">Cookie Policy</Link>
                     </div>
                 </div>
             </div>

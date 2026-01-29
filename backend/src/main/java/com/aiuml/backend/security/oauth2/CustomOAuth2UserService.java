@@ -35,7 +35,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-        String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
         String email = oAuth2User.getAttribute("email");
         
         if (!StringUtils.hasText(email)) {

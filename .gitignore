@@ -1,0 +1,22 @@
+# Java/Maven
+backend/target/
+*.class
+*.log
+backend.log
+backend_error.log
+build.log
+full_logs.txt
+
+# Node/Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+.env
+package-lock.json
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

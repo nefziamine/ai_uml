@@ -58,7 +58,9 @@ public class AuthController {
                 .role(User.Role.STUDENT) // Default role
                 .build();
 
-        userRepository.save(user);
+        if (user != null) {
+            userRepository.save(user);
+        }
 
         return ResponseEntity.ok("User registered successfully!");
     }
